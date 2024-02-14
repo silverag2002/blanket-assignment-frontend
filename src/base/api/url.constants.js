@@ -2,7 +2,7 @@ export class URLConstants {}
 //DEV
 //URLConstants.BASE_URL = "http://localhost:4001";
 //PROD
-URLConstants.BASE_URL = "http://13.235.71.106/";
+URLConstants.BASE_URL = "https://assign.smartphonetrucker.com";
 
 // AUTH ROUTES
 
