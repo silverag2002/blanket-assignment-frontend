@@ -42,7 +42,7 @@ export default function Account() {
           setUser(res.data.user);
         }
         toast.success(`Profile updated successfully`);
-        navigate("/images");
+        setTimeout(() => navigate("/images"), 1500);
       })
       .catch((err) => {
         console.log("Err", err);
@@ -63,7 +63,7 @@ export default function Account() {
         <Toaster />
       </div>
       <div className="lg:grid lg:grid-cols-12 lg:gap-x-5 mx-4 my-4">
-        <Sidebar active={0} />
+        <Sidebar active={2} />
         <div className="space-y-6 sm:px-6 lg:px-0 lg:col-span-9">
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="shadow sm:rounded-md sm:overflow-hidden">

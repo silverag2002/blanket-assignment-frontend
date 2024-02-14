@@ -1,12 +1,25 @@
 import ImageGrid from "../components/ImagesGrid";
 import Sidebar from "../components/Sidebar";
+import { useUser } from "../base/hooks/useUser";
+import { useState } from "react";
+
+import { useForm, Controller } from "react-hook-form";
+import toast, { Toaster } from "react-hot-toast";
+import { useNavigate, useLocation } from "react-router-dom";
+import { axiosInstance } from "../base/api/axios.util";
+import { URLConstants } from "../base/api/url.constants";
 
 export default function FileUpload() {
+  const [images, setImages] = useState([]);
+  const { handleSubmit, register } = useForm({});
+
+  const onSubmit = (data) => {};
+
   return (
     <div className="lg:grid lg:grid-cols-12 lg:gap-x-5 mx-4 my-4">
-      <Sidebar active={2} />
+      <Sidebar active={1} />
       <div className="space-y-6 sm:px-6 lg:px-0 lg:col-span-9">
-        <form action="#" method="POST">
+        <form onSubmit={handleSubmit(onSubmit)}>
           <div className="shadow sm:rounded-md sm:overflow-hidden">
             <div className="bg-white py-6 px-4 space-y-6 sm:p-6">
               <div>
@@ -43,10 +56,25 @@ export default function FileUpload() {
                         >
                           <span>Upload a file</span>
                           <input
-                            id="file-upload"
-                            name="file-upload"
                             type="file"
                             className="sr-only"
+                            placeholder="Image URL"
+                            multiple
+                            {...register("gallery", {
+                              onChange: (e) => {
+                                let arr = [];
+                                for (
+                                  let i = 0;
+                                  i < e.target.files.length;
+                                  i++
+                                ) {
+                                  arr.push(
+                                    URL.createObjectURL(e.target.files[i])
+                                  );
+                                }
+                                setImages(arr);
+                              },
+                            })}
                           />
                         </label>
                         <p className="pl-1">or drag and drop</p>
@@ -67,7 +95,7 @@ export default function FileUpload() {
           </div>
         </form>
         <div>
-          <ImageGrid />
+          <ImageGrid images={images} />
         </div>
       </div>
     </div>
