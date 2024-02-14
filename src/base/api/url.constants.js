@@ -10,3 +10,6 @@ URLConstants.register = () => `${URLConstants.BASE_URL}/v1/auth/register`;
 
 // USER ROUTES
 URLConstants.user = (userId) => `${URLConstants.BASE_URL}/v1/user/${userId}`;
+
+URLConstants.fileUpload = (userId) =>
+  `${URLConstants.BASE_URL}/v1/user/upload/${userId}`;

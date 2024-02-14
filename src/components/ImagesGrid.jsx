@@ -1,5 +1,3 @@
-import { useEffect } from "react";
-
 export default function ImageGrid({ images }) {
   return (
     <ul
@@ -8,7 +6,7 @@ export default function ImageGrid({ images }) {
     >
       {images?.length > 0 &&
         images.map((file, index) => (
-          <li key={file} className="relative">
+          <li key={index} className="relative">
             <div className="group block w-full aspect-w-10 aspect-h-7 rounded-lg bg-gray-100 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-offset-gray-100 focus-within:ring-indigo-500 overflow-hidden">
               <img
                 src={file}

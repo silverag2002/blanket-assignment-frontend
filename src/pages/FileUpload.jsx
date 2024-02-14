@@ -8,12 +8,55 @@ import toast, { Toaster } from "react-hot-toast";
 import { useNavigate, useLocation } from "react-router-dom";
 import { axiosInstance } from "../base/api/axios.util";
 import { URLConstants } from "../base/api/url.constants";
+import axios from "axios";
+import { AuthTokenHandler } from "../base/api/auth-token.util";
 
 export default function FileUpload() {
   const [images, setImages] = useState([]);
   const { handleSubmit, register } = useForm({});
+  const { user, setUser } = useUser();
+  const navigate = useNavigate();
 
-  const onSubmit = (data) => {};
+  const onSubmit = (data) => {
+    console.log("Data", data);
+    var formData = new FormData();
+    if (data?.imgGallery[0]?.size) {
+      for (let i = 0; i < data.imgGallery.length; i++) {
+        formData.append("images", data.imgGallery[i]);
+      }
+      const accessToken = AuthTokenHandler.getAccessToken();
+      var config = {
+        method: "POST",
+        url: URLConstants.fileUpload(user?._id),
+        headers: {
+          headers: { "content-type": "multipart/form-data" },
+          Authorization: `Bearer ${accessToken} `,
+        },
+        data: formData,
+      };
+      // .post(URLConstants.fileUpload(user?._id), { data: formData })
+      axios(config)
+        .then((res) => {
+          console.log("Response after submitting form", res);
+
+          toast.success(`Profile updated successfully`);
+          setTimeout(() => navigate("/images"), 1500);
+        })
+        .catch((err) => {
+          console.log("Err", err);
+
+          if (err.response.status == 401) {
+            console.log("Triggered");
+            toast.error(`Please Login again!`);
+            setTimeout(() => navigate("/"), 1500);
+          } else {
+            toast.error(`Something went wrong please try again later!`);
+          }
+        });
+    } else {
+      toast.error("Please uplaod an image");
+    }
+  };
 
   return (
     <div className="lg:grid lg:grid-cols-12 lg:gap-x-5 mx-4 my-4">
@@ -33,54 +76,6 @@ export default function FileUpload() {
                   <label className="block text-sm font-medium text-gray-700">
                     Add Image
                   </label>
-                  {/* <div className="mt-1 border-2 border-gray-300 border-dashed rounded-md px-6 pt-5 pb-6 flex justify-center">
-                    <div className="space-y-1 text-center">
-                      <svg
-                        className="mx-auto h-12 w-12 text-gray-400"
-                        stroke="currentColor"
-                        fill="none"
-                        viewBox="0 0 48 48"
-                        aria-hidden="true"
-                      >
-                        <path
-                          d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
-                          strokeWidth={2}
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                      <div className="flex text-sm text-gray-600">
-                        <label
-                          htmlFor="file-upload"
-                          className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
-                        >
-                          <span>Upload a file</span>
-                          <input
-                            type="file"
-                            className="sr-only"
-                            placeholder="Image URL"
-                            multiple
-                            {...register("gallery", {
-                              onChange: (e) => {
-                                let arr = [];
-                                for (
-                                  let i = 0;
-                                  i < e.target.files.length;
-                                  i++
-                                ) {
-                                  arr.push(
-                                    URL.createObjectURL(e.target.files[i])
-                                  );
-                                }
-                                setImages(arr);
-                              },
-                            })}
-                          />
-                        </label>
-                        <p className="pl-1">or drag and drop</p>
-                      </div>
-                    </div>
-                  </div> */}
 
                   <div class="flex items-center justify-center w-full mt-4">
                     <label
@@ -113,7 +108,7 @@ export default function FileUpload() {
                         type="file"
                         multiple
                         class="hidden"
-                        {...register("gallery", {
+                        {...register("imgGallery", {
                           onChange: (e) => {
                             let arr = [];
                             for (let i = 0; i < e.target.files.length; i++) {
