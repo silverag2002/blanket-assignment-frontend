@@ -1,6 +1,8 @@
 export class URLConstants {}
-
-URLConstants.BASE_URL = "http://localhost:4001";
+//DEV
+//URLConstants.BASE_URL = "http://localhost:4001";
+//PROD
+URLConstants.BASE_URL = "http://13.235.71.106/";
 
 // AUTH ROUTES
 
