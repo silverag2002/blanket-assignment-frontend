@@ -13,3 +13,6 @@ URLConstants.user = (userId) => `${URLConstants.BASE_URL}/v1/user/${userId}`;
 
 URLConstants.fileUpload = (userId) =>
   `${URLConstants.BASE_URL}/v1/user/upload/${userId}`;
+
+URLConstants.deleteImage = (userId) =>
+  `${URLConstants.BASE_URL}/v1/user/delete-image/${userId}`;
