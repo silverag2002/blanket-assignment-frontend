@@ -45,7 +45,7 @@ export default function FileUpload() {
         .catch((err) => {
           console.log("Err", err);
 
-          if (err.response.status == 401) {
+          if (err.response?.status == 401) {
             console.log("Triggered");
             toast.error(`Please Login again!`);
             setTimeout(() => navigate("/"), 1500);

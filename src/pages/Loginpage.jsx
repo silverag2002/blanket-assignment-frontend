@@ -20,7 +20,7 @@ const Loginpage = () => {
       .catch((error) => {
         console.log("Errro", error);
 
-        if (error.response.status == 401) {
+        if (error.response?.status == 401) {
           toast.error(`Please check the credentails you have provided.`);
         } else {
           toast.error(`Something went wrong please try again later!`);
